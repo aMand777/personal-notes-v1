@@ -1,17 +1,18 @@
 // import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../../hooks/useAuth'
 
-const authUser = false
+// const authUser = true
 
 function RequireAuth() {
-  console.log('useAuth===>', useAuth)
+  const { isAuthenticated } = useAuth()
+  console.log('isAuthenticated===>', isAuthenticated)
 
-  if (!authUser) {
-    (<Navigate to='/login' />)
+  if (!isAuthenticated) {
+    return <Navigate to='/auth/login' replace />
   }
-
   return <Outlet />
+
 }
 
 export default RequireAuth

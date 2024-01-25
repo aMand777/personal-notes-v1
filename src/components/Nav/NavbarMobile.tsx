@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-// import { func, string } from 'prop-types'
 import { IoSearchOutline, IoLanguageOutline } from 'react-icons/io5'
 import { IoMdArrowBack } from 'react-icons/io'
 // import { putAccessToken } from '../../utils/network-data'
@@ -15,7 +14,7 @@ import SelectTheme from '../theme/SelectTheme'
 const NavbarMobile = () => {
   // const { user, setUser } = React.useContext(UserContext)
   const { isLocale, setIsLocale } = useContext(LocaleContext)
-  const [openSearchbar, setOpenSearchbar] = useState(false)
+  const [openSearchBar, setOpenSearchBar] = useState(false)
 
   const handleSignOut = () => {
     null
@@ -34,15 +33,15 @@ const NavbarMobile = () => {
   return (
     <>
       <div className='navbar bg-accent md:hidden'>
-        <div className='flex-1 ml-1'>{!openSearchbar && <SelectTheme />}</div>
+        <div className='flex-1 ml-1'>{!openSearchBar && <SelectTheme />}</div>
         <div className='flex-none gap-2'>
-          <label htmlFor='search' onClick={() => setOpenSearchbar(true)}>
+          <label htmlFor='search' onClick={() => setOpenSearchBar(true)}>
             <IoSearchOutline size={30} className='text-accent-content cursor-pointer' />
           </label>
-          {openSearchbar === true && (
+          {openSearchBar === true && (
             <div className='form-control absolute left-1 flex right-1 z-50 flex-row items-center gap-1'>
               <button
-                onClick={() => setOpenSearchbar(false)}
+                onClick={() => setOpenSearchBar(false)}
                 className='btn btn-accent z-50 text-accent-content'>
                 <IoMdArrowBack size={30} />
               </button>
@@ -118,11 +117,5 @@ const NavbarMobile = () => {
     </>
   )
 }
-
-// NavbarMobile.propTypes = {
-//   onSearch: func.isRequired,
-//   value: string,
-//   search: string,
-// }
 
 export default NavbarMobile
