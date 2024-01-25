@@ -17,7 +17,7 @@ export const LocaleContext = createContext(InitialLocaleContext)
 type LocaleProviderProps = {
   children: React.ReactNode
 }
-export const LocaleContextProvider: React.FC<LocaleProviderProps> = ({ children }) => {
+const LocaleContextProvider: React.FC<LocaleProviderProps> = ({ children }) => {
   const [locale, setLocale] = useState(() => getCurrentLocale())
 
   const contextValue = React.useMemo(

@@ -1,11 +1,26 @@
 import './App.css'
-import Navbar from './components/Nav/Navbar'
+import Navbar from './components/nav/Navbar'
+import NavbarMobile from './components/nav/NavbarMobile'
+import PrivateRoute from './components/routes/PrivateRoute'
+import Login from './features/auth/login/pages/Login'
+import {Routes, Route} from 'react-router-dom'
 
 function App() {
   return (
     <>
       <Navbar />
-      <h1 className='text-3xl text-red-500'>Hallo Dunia Fana</h1>
+      <NavbarMobile />
+      {/* <h1 className='text-3xl text-red-500'>Hallo Dunia Fana</h1>
+      <Login /> */}
+
+      <Routes>
+        <Route element={<Login />}>
+          <Route path='auth/login' element={<Login />} />
+          <Route element={<PrivateRoute isAuthenticated={false } />}>
+            <Route path='/' element={<p>Notes</p>} />
+          </Route>
+        </Route>
+      </Routes>
     </>
   )
 }
