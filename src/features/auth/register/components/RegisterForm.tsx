@@ -7,23 +7,32 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from "zod"
 
-const FormSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'Email is required' })
-    .email({ message: 'Invalid email' }),
-  password: z
-    .string()
-    .min(1, { message: 'Password is required' })
-    .min(6, { message: 'Password must be at least 6 characters' }),
-})
+const FormSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, { message: 'Name is required' })
+      .min(3, { message: 'Name must be at least 3 characters' }),
+    email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Invalid email' }),
+    password: z
+      .string()
+      .min(1, { message: 'Password is required' })
+      .min(6, { message: 'Password must be at least 6 characters' }),
+    confirmPassword: z.string().min(1, { message: 'Confirm Password is required' }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
 
 type Inputs = {
+  name: string,
   email: string,
   password: string,
+  confirmPassword: string,
 };
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = React.useContext(LocaleContext)
   const {
@@ -34,14 +43,14 @@ const LoginForm = () => {
   } = useForm<Inputs>({
     resolver: zodResolver(FormSchema),
   defaultValues: {
+      name: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
   })
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log('data===>', data)
 
-  // console.log('email===>', watch('email'))
-  // console.log('password===>', watch('password'))
     const handleCheckboxChange = () => {
       setShowPassword(!showPassword)
     }
@@ -54,6 +63,18 @@ const LoginForm = () => {
         </div>
         <p className='text-2xl font-semibold'>Login</p>
         <form onSubmit={handleSubmit(onSubmit)} className='w-11/12 md:max-w-md' noValidate>
+          <label className='form-control w-full'>
+            <div className='label'>
+              <span className='label-text'>Name</span>
+            </div>
+            <input
+              type='name'
+              placeholder='example@mail.com'
+              className={`${errors.name ? 'input-error' : ''} input input-bordered w-full`}
+              {...register('name')}
+            />
+            {errors.name && <AlertMessage message={errors.name.message} />}
+          </label>
           <label className='form-control w-full'>
             <div className='label'>
               <span className='label-text'>Email</span>
@@ -78,6 +99,20 @@ const LoginForm = () => {
             />
             {errors.password && <AlertMessage message={errors.password.message} />}
           </label>
+          <label className='form-control w-full'>
+            <div className='label'>
+              <span className='label-text'>Confirm Password</span>
+            </div>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder='Confirm Password*'
+              className={`${
+                errors.confirmPassword ? 'input-error' : ''
+              } input input-bordered w-full`}
+              {...register('confirmPassword')}
+            />
+            {errors.confirmPassword && <AlertMessage message={errors.confirmPassword.message} />}
+          </label>
           <label className='label cursor-pointer'>
             <span className='label-text'>Show Password</span>
             <input
@@ -91,9 +126,9 @@ const LoginForm = () => {
           </button>
         </form>
         <div className='flex gap-1 mt-5'>
-          <p>{isLocale === 'id' ? 'Belum punya akun?' : "Don't have an account?"}</p>
-          <Link to='/auth/register' className='link link-info'>
-            {isLocale === 'id' ? 'Daftar disini' : 'Register here'}
+          <p>{isLocale === 'id' ? 'Sudah punya akun?' : 'Already have an account?'}</p>
+          <Link to='/auth/login' className='link link-info'>
+            {isLocale === 'id' ? 'Masuk disini' : 'Sign in here'}
           </Link>
         </div>
       </div>
@@ -101,4 +136,4 @@ const LoginForm = () => {
   )
 }
 
-export default LoginForm
+export default RegisterForm

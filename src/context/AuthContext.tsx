@@ -6,7 +6,7 @@ type AuthContext = {
 }
 
 const InitialAuthContext: AuthContext = {
-  isAuthenticated: true,
+  isAuthenticated: false,
   setAuthenticated: (value: boolean) => value,
 }
 
@@ -16,7 +16,7 @@ type AuthContextProviderProps = {
   children: React.ReactNode
 }
 const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) => {
-  const [isAuth, setIsAuth] = React.useState<boolean>(true)
+  const [isAuth, setIsAuth] = React.useState<boolean>(false)
 
   const contextValue = React.useMemo(
     () => ({
