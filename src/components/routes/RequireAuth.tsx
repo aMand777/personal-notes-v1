@@ -12,7 +12,6 @@ function RequireAuth() {
     return <Navigate to='/auth/login' replace />
   }
   return <Outlet />
-
 }
 
 export default RequireAuth

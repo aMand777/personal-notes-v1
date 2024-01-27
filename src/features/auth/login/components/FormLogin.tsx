@@ -23,7 +23,7 @@ type Inputs = {
   password: string,
 };
 
-const LoginForm = () => {
+const FormLogin = () => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = React.useContext(LocaleContext)
   const {
@@ -101,4 +101,4 @@ const LoginForm = () => {
   )
 }
 
-export default LoginForm
+export default FormLogin

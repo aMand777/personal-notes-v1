@@ -1,4 +1,4 @@
-import LoginForm from '../components/LoginForm'
+import FormLogin from '../components/FormLogin.tsx'
 // import useAuth from '../../../../hooks/useAuth.ts'
 import { useQuery } from '@tanstack/react-query'
 import { GET_USER_LOGGED_IN } from '../../../../services/user.services.ts'
@@ -18,10 +18,11 @@ const Login = () => {
   })
 
   if (isLoading) return null
+  console.log('isLoading', isLoading)
 
   return (
     <>
-      <LoginForm />
+      <FormLogin />
     </>
   )
 }

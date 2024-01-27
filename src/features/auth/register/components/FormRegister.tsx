@@ -32,7 +32,7 @@ type Inputs = {
   confirmPassword: string,
 };
 
-const RegisterForm = () => {
+const FormRegister = () => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = React.useContext(LocaleContext)
   const {
@@ -136,4 +136,4 @@ const RegisterForm = () => {
   )
 }
 
-export default RegisterForm
+export default FormRegister

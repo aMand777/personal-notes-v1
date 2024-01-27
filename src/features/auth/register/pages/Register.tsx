@@ -1,10 +1,10 @@
 // import React from 'react'
-import RegisterForm from '../components/RegisterForm'
+import FormRegister from '../components/FormRegister'
 
 const Register = () => {
   return (
     <>
-      <RegisterForm />
+      <FormRegister />
     </>
   )
 }
