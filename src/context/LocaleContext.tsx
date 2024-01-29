@@ -1,5 +1,4 @@
 import React from 'react'
-import { createContext, useState } from 'react'
 import { getCurrentLocale } from '../utils/storage'
 
 type LocaleContextType = {
@@ -12,13 +11,13 @@ const InitialLocaleContext: LocaleContextType = {
   setIsLocale: (value: string) => value,
 }
 
-export const LocaleContext = createContext(InitialLocaleContext)
+export const LocaleContext = React.createContext(InitialLocaleContext)
 
 type LocaleProviderProps = {
   children: React.ReactNode
 }
 const LocaleContextProvider: React.FC<LocaleProviderProps> = ({ children }) => {
-  const [locale, setLocale] = useState(() => getCurrentLocale())
+  const [locale, setLocale] = React.useState(() => getCurrentLocale())
 
   const contextValue = React.useMemo(
     () => ({

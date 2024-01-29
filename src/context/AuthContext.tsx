@@ -1,4 +1,4 @@
-import React, { createContext } from 'react'
+import React from 'react'
 
 type AuthContext = {
   isAuthenticated: boolean
@@ -10,7 +10,7 @@ const InitialAuthContext: AuthContext = {
   setAuthenticated: (value: boolean) => value,
 }
 
-export const AuthContext = createContext(InitialAuthContext)
+export const AuthContext = React.createContext(InitialAuthContext)
 
 type AuthContextProviderProps = {
   children: React.ReactNode
@@ -23,8 +23,10 @@ const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) =
       isAuthenticated: isAuth,
       setAuthenticated: (value: boolean) => setIsAuth(value),
     }),
-    [isAuth])
-    return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+    [isAuth],
+  )
+
+  return <AuthContext.Provider value = { contextValue } > { children } </AuthContext.Provider >
 }
 
 export default AuthContextProvider

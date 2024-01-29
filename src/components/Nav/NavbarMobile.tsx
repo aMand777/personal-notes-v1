@@ -1,25 +1,22 @@
 import { useContext, useState } from 'react'
 import { IoSearchOutline, IoLanguageOutline } from 'react-icons/io5'
 import { IoMdArrowBack } from 'react-icons/io'
-// import { putAccessToken } from '../../utils/network-data'
 import { MdOutlineLogout } from 'react-icons/md'
 import { LocaleContext } from '../../context/LocaleContext'
 import { FaCheck } from 'react-icons/fa6'
 import { setDataLocale } from '../../utils/storage'
-// import UserContext from '../../contexts/UserContext'
 import SelectTheme from '../theme/SelectTheme'
+import { removeStorage } from '../../utils/storage'
+import useAuth from '../../hooks/useAuth'
 
-// 
-// const NavbarMobile = ({ onSearch, value, search }) => {
 const NavbarMobile = () => {
-  // const { user, setUser } = React.useContext(UserContext)
+    const { setAuthenticated } = useAuth()
   const { isLocale, setIsLocale } = useContext(LocaleContext)
   const [openSearchBar, setOpenSearchBar] = useState(false)
 
-  const handleSignOut = () => {
-    null
-    // setUser(null)
-    // putAccessToken('')
+  const handleLogout = () => {
+    setAuthenticated(false)
+    removeStorage('accessToken')
   }
 
   const handleClickEn = () => {
@@ -56,8 +53,6 @@ const NavbarMobile = () => {
                   type='search'
                   placeholder={isLocale === 'id' ? 'Cari berdasarkan judul ..' : 'Search by title ..'}
                   className='input input-bordered w-full mx-auto pl-10 absolute top-1/2 transform -translate-y-1/2'
-                  // value={search || value}
-                  // onChange={onSearch}
                 />
               </div>
             </div>
@@ -105,7 +100,7 @@ const NavbarMobile = () => {
               </div>
               <div className='divider -my-1'></div>
               <li>
-                <button className='flex justify-between' onClick={handleSignOut}>
+                <button className='flex justify-between' onClick={handleLogout}>
                   <span>Sign out</span>
                   <MdOutlineLogout size={20} color='red' />
                 </button>

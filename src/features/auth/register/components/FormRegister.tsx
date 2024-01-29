@@ -35,10 +35,10 @@ type Inputs = {
 const FormRegister = () => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = React.useContext(LocaleContext)
+
   const {
     register,
     handleSubmit,
-    // watch,
     formState: { errors },
   } = useForm<Inputs>({
     resolver: zodResolver(FormSchema),
@@ -49,6 +49,7 @@ const FormRegister = () => {
       confirmPassword: '',
     },
   })
+
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log('data===>', data)
 
     const handleCheckboxChange = () => {

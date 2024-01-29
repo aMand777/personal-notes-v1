@@ -5,24 +5,17 @@ import { MdOutlineLogout } from 'react-icons/md'
 import { LocaleContext } from '../../context/LocaleContext'
 import { setDataLocale } from '../../utils/storage'
 import SelectTheme from '../theme/SelectTheme'
-// import { putAccessToken } from '../../utils/network-data'
+import { removeStorage } from '../../utils/storage'
 import { FaCheck } from 'react-icons/fa6'
-// import UserContext from '../../contexts/UserContext'
-// import SelectTheme from '../theme/SelectTheme'
+import useAuth from '../../hooks/useAuth'
 
-// type NavbarProps = {
-//   onSearch: () => void;
-//   value: string;
-//   search: string;
-// }
-
-// const Navbar: React.FC<NavbarProps> = ({ onSearch, value, search }) => {
 const Navbar = () => {
+  const { setAuthenticated } = useAuth()
   const { isLocale, setIsLocale } = React.useContext(LocaleContext)
 
-  const handleSignOut = () => {
-    // setUser(null)
-    // putAccessToken('')
+  const handleLogin = () => {
+    setAuthenticated(false)
+    removeStorage('accessToken')
   }
 
   const handleClickEn = () => {
@@ -52,8 +45,6 @@ const Navbar = () => {
               type='search'
               placeholder={isLocale === 'id' ? 'Cari berdasarkan judul ..' : 'Search by title ..'}
               className='input input-bordered w-full mx-auto pl-10 absolute top-1/2 transform -translate-y-1/2'
-              // value={search || value}
-              // onChange={onSearch}
             />
           </div>
           <div className='dropdown dropdown-end'>
@@ -99,7 +90,7 @@ const Navbar = () => {
               </span>
               <div className='divider -my-1'></div>
               <li>
-                <button className='flex justify-between' onClick={handleSignOut}>
+                <button className='flex justify-between' onClick={handleLogin}>
                   <span>Sign out</span>
                   <MdOutlineLogout size={20} color='red' />
                 </button>

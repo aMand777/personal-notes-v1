@@ -5,13 +5,12 @@ import AlertMessage from '../../../../components/alert/AlertMessage'
 import { LocaleContext } from '../../../../context/LocaleContext'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from "zod"
+import { z } from 'zod'
+import { POST_LOGIN } from '../../../../services/auth.services'
+import { setStorage } from '../../../../utils/storage'
 
 const FormSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'Email is required' })
-    .email({ message: 'Invalid email' }),
+  email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Invalid email' }),
   password: z
     .string()
     .min(1, { message: 'Password is required' })
@@ -19,32 +18,45 @@ const FormSchema = z.object({
 })
 
 type Inputs = {
-  email: string,
-  password: string,
-};
+  email: string
+  password: string
+}
 
 const FormLogin = () => {
+  const [errorMessage, setErrorMessage] = React.useState<string>('')
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = React.useContext(LocaleContext)
+
   const {
     register,
     handleSubmit,
-    // watch,
     formState: { errors },
   } = useForm<Inputs>({
     resolver: zodResolver(FormSchema),
-  defaultValues: {
+    defaultValues: {
       email: '',
       password: '',
     },
   })
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log('data===>', data)
 
-  // console.log('email===>', watch('email'))
-  // console.log('password===>', watch('password'))
-    const handleCheckboxChange = () => {
-      setShowPassword(!showPassword)
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const { email, password } = data
+    try {
+      const response = await POST_LOGIN(email, password)
+      if (response.status === 'success') {
+        const accessToken = response.data.accessToken
+        setStorage('accessToken', accessToken)
+        window.location.href = '/'
+      }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      setErrorMessage(error)
     }
+  }
+
+  const handleCheckboxChange = () => {
+    setShowPassword(!showPassword)
+  }
 
   return (
     <div className='w-full flex justify-center items-center mt-10'>
@@ -64,7 +76,13 @@ const FormLogin = () => {
               className={`${errors.email ? 'input-error' : ''} input input-bordered w-full`}
               {...register('email')}
             />
-            {errors.email && <AlertMessage message={errors.email.message} />}
+            {errors.email ? (
+              <AlertMessage message={errors.email?.message} />
+            ) : (
+              errorMessage.toLowerCase().includes('email') && (
+                <AlertMessage message={errorMessage} />
+              )
+            )}
           </label>
           <label className='form-control w-full'>
             <div className='label'>
@@ -76,7 +94,13 @@ const FormLogin = () => {
               className={`${errors.password ? 'input-error' : ''} input input-bordered w-full`}
               {...register('password')}
             />
-            {errors.password && <AlertMessage message={errors.password.message} />}
+            {errors.password ? (
+              <AlertMessage message={errors.password?.message} />
+            ) : (
+              errorMessage.toLowerCase().includes('password') && (
+                <AlertMessage message={errorMessage} />
+              )
+            )}
           </label>
           <label className='label cursor-pointer'>
             <span className='label-text'>Show Password</span>
