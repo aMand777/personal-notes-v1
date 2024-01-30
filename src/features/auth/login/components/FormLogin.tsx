@@ -79,7 +79,7 @@ const FormLogin = () => {
             {errors.email ? (
               <AlertMessage message={errors.email?.message} />
             ) : (
-              errorMessage.toLowerCase().includes('email') && (
+              errorMessage?.toLowerCase().includes('email') && (
                 <AlertMessage message={errorMessage} />
               )
             )}
@@ -97,7 +97,7 @@ const FormLogin = () => {
             {errors.password ? (
               <AlertMessage message={errors.password?.message} />
             ) : (
-              errorMessage.toLowerCase().includes('password') && (
+              errorMessage?.toLowerCase().includes('password') && (
                 <AlertMessage message={errorMessage} />
               )
             )}

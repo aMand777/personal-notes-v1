@@ -8,9 +8,11 @@ import { setDataLocale } from '../../utils/storage'
 import SelectTheme from '../theme/SelectTheme'
 import { removeStorage } from '../../utils/storage'
 import useAuth from '../../hooks/useAuth'
+import useUser from '../../hooks/useUser'
 
 const NavbarMobile = () => {
-    const { setAuthenticated } = useAuth()
+  const { setAuthenticated } = useAuth()
+  const { userLogin } = useUser()
   const { isLocale, setIsLocale } = useContext(LocaleContext)
   const [openSearchBar, setOpenSearchBar] = useState(false)
 
@@ -51,7 +53,9 @@ const NavbarMobile = () => {
                 <input
                   id='search'
                   type='search'
-                  placeholder={isLocale === 'id' ? 'Cari berdasarkan judul ..' : 'Search by title ..'}
+                  placeholder={
+                    isLocale === 'id' ? 'Cari berdasarkan judul ..' : 'Search by title ..'
+                  }
                   className='input input-bordered w-full mx-auto pl-10 absolute top-1/2 transform -translate-y-1/2'
                 />
               </div>
@@ -87,7 +91,7 @@ const NavbarMobile = () => {
               <div className='w-10 rounded-full'>
                 <img
                   alt='Tailwind CSS Navbar component'
-                  src={`https://ui-avatars.com/api/?name=admin&background=random`}
+                  src={`https://ui-avatars.com/api/?name=${userLogin?.name}&background=random`}
                 />
               </div>
             </div>
@@ -95,7 +99,7 @@ const NavbarMobile = () => {
               tabIndex={0}
               className='mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 overflow-hidden'>
               <div className='flex justify-between text-base cursor-default items-center px-3 py-2'>
-                <p className='italic truncate'>admin</p>
+                <p className='italic truncate'>{ userLogin?.name }</p>
                 <span className='badge badge-success badge-xs ml-5 animate-pulse'></span>
               </div>
               <div className='divider -my-1'></div>
