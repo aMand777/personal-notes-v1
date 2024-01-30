@@ -50,7 +50,7 @@ const FormRegister = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log('data===>', data)
+  const onSubmit: SubmitHandler<Inputs> = async (data) => console.log('data===>', data)
 
     const handleCheckboxChange = () => {
       setShowPassword(!showPassword)
