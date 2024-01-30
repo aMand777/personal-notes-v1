@@ -27,32 +27,32 @@ const FormLogin = () => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = React.useContext(LocaleContext)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  })
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<Inputs>({
+      resolver: zodResolver(FormSchema),
+      defaultValues: {
+        email: '',
+        password: '',
+      },
+    })
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const { email, password } = data
-    try {
-      const response = await POST_LOGIN(email, password)
-      if (response.status === 'success') {
-        const accessToken = response.data.accessToken
-        setStorage('accessToken', accessToken)
-        window.location.href = '/'
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+      const { email, password } = data
+      try {
+        const response = await POST_LOGIN(email, password)
+        if (response.status === 'success') {
+          const accessToken = response.data.accessToken
+          setStorage('accessToken', accessToken)
+          window.location.href = '/'
+        }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        setErrorMessage(error)
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      setErrorMessage(error)
     }
-  }
 
   const handleCheckboxChange = () => {
     setShowPassword(!showPassword)

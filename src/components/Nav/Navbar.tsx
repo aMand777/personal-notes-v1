@@ -13,7 +13,7 @@ const Navbar = () => {
   const { setAuthenticated } = useAuth()
   const { isLocale, setIsLocale } = React.useContext(LocaleContext)
 
-  const handleLogin = () => {
+  const handleLogout = () => {
     setAuthenticated(false)
     removeStorage('accessToken')
   }
@@ -90,8 +90,8 @@ const Navbar = () => {
               </span>
               <div className='divider -my-1'></div>
               <li>
-                <button className='flex justify-between' onClick={handleLogin}>
-                  <span>Sign out</span>
+                <button className='flex justify-between' onClick={handleLogout}>
+                  <span>Logout</span>
                   <MdOutlineLogout size={20} color='red' />
                 </button>
               </li>
