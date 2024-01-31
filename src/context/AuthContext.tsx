@@ -34,7 +34,7 @@ const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) =
       }
       return result
     },
-    retry: false,
+    // retry: false,
   })
 
   const contextValue = React.useMemo(
