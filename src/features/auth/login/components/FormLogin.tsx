@@ -24,6 +24,7 @@ type Inputs = {
 }
 
 const FormLogin = () => {
+  const [loading, setLoading] = React.useState<boolean>(false)
   const [errorMessage, setErrorMessage] = React.useState<string>('')
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = React.useContext(LocaleContext)
@@ -43,16 +44,19 @@ const FormLogin = () => {
   const { mutateAsync: authUser } = useMutation({
     mutationFn: POST_LOGIN,
     onSuccess: (data) => {
+      setLoading(false)
       const accessToken = data.data.accessToken
       setStorage('accessToken', accessToken)
       window.location.href = '/'
     },
     onError: (error: string) => {
+      setLoading(false)
       setErrorMessage(error)
     },
   })
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setLoading(true)
     await authUser(data)
   }
 
@@ -112,8 +116,9 @@ const FormLogin = () => {
               className='checkbox checkbox-accent'
             />
           </label>
-          <button type='submit' className='btn btn-primary w-full mt-5'>
-            Login
+          <button disabled={loading} type='submit' className='btn btn-primary w-full mt-5'>
+            {loading && <span className='loading loading-spinner'></span>}
+            {loading ? 'loading...' : 'Login'}
           </button>
         </form>
         <div className='flex gap-1 mt-5'>

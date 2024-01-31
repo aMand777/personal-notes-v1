@@ -38,6 +38,7 @@ type Inputs = {
 const FormRegister = () => {
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = React.useState<string>('')
+  const [loading, setLoading] = React.useState<boolean>(false)
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = React.useContext(LocaleContext)
 
@@ -58,15 +59,18 @@ const FormRegister = () => {
   const { mutateAsync: registerUser } = useMutation({
     mutationFn: POST_REGISTER_USER,
     onSuccess: () => {
+      setLoading(false)
       openAlert('alert-confirm')
       navigate('/auth/login')
     },
     onError: (error: string) => {
+      setLoading(false)
       setErrorMessage(error)
     },
   })
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setLoading(true)
     const user = {
       name: data.name,
       email: data.email,
@@ -85,7 +89,7 @@ const FormRegister = () => {
         <div className='bg-secondary rounded-full p-1 text-secondary-content mb-2'>
           <PiLockKeyDuotone size={30} />
         </div>
-        <p className='text-2xl font-semibold'>Login</p>
+        <p className='text-2xl font-semibold'>Register</p>
         <form onSubmit={handleSubmit(onSubmit)} className='w-11/12 md:max-w-md' noValidate>
           <label className='form-control w-full'>
             <div className='label'>
@@ -151,14 +155,15 @@ const FormRegister = () => {
               className='checkbox checkbox-accent'
             />
           </label>
-          <button type='submit' className='btn btn-primary w-full mt-5'>
-            Login
+          <button disabled={loading} type='submit' className='btn btn-primary w-full mt-5'>
+            {loading && <span className='loading loading-spinner'></span>}
+            {loading ? 'loading...' : 'Register'}
           </button>
         </form>
-        <div className='flex gap-1 mt-5'>
+        <div className='flex gap-1 mt-5 mb-5'>
           <p>{isLocale === 'id' ? 'Sudah punya akun?' : 'Already have an account?'}</p>
           <Link to='/auth/login' className='link link-info'>
-            {isLocale === 'id' ? 'Masuk disini' : 'Sign in here'}
+            {isLocale === 'id' ? 'Masuk disini' : 'Login here'}
           </Link>
         </div>
       </div>
