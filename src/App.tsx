@@ -5,6 +5,7 @@ import Login from './features/auth/login/pages/Login'
 import Register from './features/auth/register/pages/Register'
 import NotFound from './components/NotFound/NotFound'
 import RequireAuth from './components/routes/RequireAuth'
+import Notes from './features/notes/pages/Notes'
 
 function App() {
 
@@ -18,8 +19,8 @@ function App() {
           {/* private route */}
           {/* <Route element={<PrivateRoute isAuthenticated={true} />}> */}
           <Route element={<RequireAuth />}>
-            <Route path='/' element={<p>Notes Page</p>} />
-            <Route path='/notes' element={<p>Notes</p>} />
+            <Route path='/' element={<Notes />} />
+            <Route path='/notes' element={<Notes />} />
           </Route>
           {/* not found route page */}
           <Route path='*' element={<NotFound />} />

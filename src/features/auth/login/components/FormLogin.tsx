@@ -10,7 +10,6 @@ import { setStorage } from '../../../../utils/storage'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useLocale from '../../../../hooks/useLocale'
 
-
 const FormSchema = z.object({
   email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Invalid email' }),
   password: z
@@ -50,7 +49,7 @@ const FormLogin = () => {
       const accessToken = data.data.accessToken
       setStorage('accessToken', accessToken)
       queryClient.invalidateQueries({ queryKey: ['GET_USER_LOGGED_IN'] })
-      // window.location.href = '/'
+      queryClient.invalidateQueries({ queryKey: ['GET_NOTES'] })
     },
     onError: (error: string) => {
       setLoading(false)
