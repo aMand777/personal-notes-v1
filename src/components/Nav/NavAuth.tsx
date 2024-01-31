@@ -1,12 +1,11 @@
-import React from 'react'
 import { IoLanguageOutline } from 'react-icons/io5'
-import { LocaleContext } from '../../context/LocaleContext'
 import { FaCheck } from 'react-icons/fa6'
 import { setDataLocale } from '../../utils/storage'
 import SelectTheme from '../theme/SelectTheme'
+import useLocale from '../../hooks/useLocale'
 
 const NavAuth = () => {
-  const { isLocale, setIsLocale } = React.useContext(LocaleContext)
+  const { isLocale, setIsLocale } = useLocale()
 
   const handleClickEn = () => {
     setIsLocale('en')

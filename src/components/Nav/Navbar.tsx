@@ -1,20 +1,18 @@
-import React from 'react'
 import { IoSearchOutline } from 'react-icons/io5'
 import { IoLanguageOutline } from 'react-icons/io5'
 import { MdOutlineLogout } from 'react-icons/md'
-import { LocaleContext } from '../../context/LocaleContext'
 import { setDataLocale } from '../../utils/storage'
 import SelectTheme from '../theme/SelectTheme'
 import { removeStorage } from '../../utils/storage'
 import { FaCheck } from 'react-icons/fa6'
 import useAuth from '../../hooks/useAuth'
 import useUser from '../../hooks/useUser'
+import useLocale from '../../hooks/useLocale'
 
 const Navbar = () => {
   const { setAuthenticated } = useAuth()
   const { userLogin } = useUser()
-  const { isLocale, setIsLocale } = React.useContext(LocaleContext)
-
+  const { isLocale, setIsLocale } = useLocale()
   const handleLogout = () => {
     setAuthenticated(false)
     removeStorage('accessToken')
@@ -87,13 +85,13 @@ const Navbar = () => {
               tabIndex={0}
               className='mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 overflow-hidden'>
               <span className='flex justify-between text-base cursor-default items-center px-3 py-2'>
-                <p className='italic'>{ userLogin?.name }</p>
+                <p className='italic'>{userLogin?.name}</p>
                 <span className='badge badge-success badge-xs ml-5 animate-pulse'></span>
               </span>
               <div className='divider -my-1'></div>
               <li>
                 <button className='flex justify-between' onClick={handleLogout}>
-                  <span>Logout</span>
+                  <span>{isLocale === 'id' ? 'Keluar' : 'Logout'}</span>
                   <MdOutlineLogout size={20} color='red' />
                 </button>
               </li>
