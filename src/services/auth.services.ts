@@ -1,8 +1,13 @@
 import { instanceApi } from '../lib/axios';
 
-export const POST_LOGIN = async (email: string, password: string) => {
+type Authentication = {
+  email: string
+  password: string
+}
+
+export const POST_LOGIN = async (auth: Authentication) => {
   try {
-    const { data } = await instanceApi.post('/login', { email, password })
+    const { data } = await instanceApi.post('/login', auth)
     return data
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
