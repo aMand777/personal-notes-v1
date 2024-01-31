@@ -1,11 +1,14 @@
 import React from 'react'
 import { PiLockKeyDuotone } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AlertMessage from '../../../../components/alert/AlertMessage'
 import { LocaleContext } from '../../../../context/LocaleContext'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from "zod"
+import { z } from 'zod'
+import { useMutation } from '@tanstack/react-query'
+import { POST_REGISTER_USER } from '../../../../services/register.services'
+import { openAlert } from '../../../../utils/handleModal'
 
 const FormSchema = z
   .object({
@@ -26,13 +29,15 @@ const FormSchema = z
   })
 
 type Inputs = {
-  name: string,
-  email: string,
-  password: string,
-  confirmPassword: string,
-};
+  name: string
+  email: string
+  password: string
+  confirmPassword: string
+}
 
 const FormRegister = () => {
+  const navigate = useNavigate()
+  const [errorMessage, setErrorMessage] = React.useState<string>('')
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = React.useContext(LocaleContext)
 
@@ -42,7 +47,7 @@ const FormRegister = () => {
     formState: { errors },
   } = useForm<Inputs>({
     resolver: zodResolver(FormSchema),
-  defaultValues: {
+    defaultValues: {
       name: '',
       email: '',
       password: '',
@@ -50,11 +55,29 @@ const FormRegister = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => console.log('data===>', data)
+  const { mutateAsync: registerUser } = useMutation({
+    mutationFn: POST_REGISTER_USER,
+    onSuccess: () => {
+      openAlert('alert-confirm')
+      navigate('/auth/login')
+    },
+    onError: (error: string) => {
+      setErrorMessage(error)
+    },
+  })
 
-    const handleCheckboxChange = () => {
-      setShowPassword(!showPassword)
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const user = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
     }
+    await registerUser(user)
+  }
+
+  const handleCheckboxChange = () => {
+    setShowPassword(!showPassword)
+  }
 
   return (
     <div className='w-full flex justify-center items-center mt-10'>
@@ -86,7 +109,13 @@ const FormRegister = () => {
               className={`${errors.email ? 'input-error' : ''} input input-bordered w-full`}
               {...register('email')}
             />
-            {errors.email && <AlertMessage message={errors.email.message} />}
+            {errors.email ? (
+              <AlertMessage message={errors.email?.message} />
+            ) : (
+              errorMessage?.toLowerCase().includes('email') && (
+                <AlertMessage message={errorMessage} />
+              )
+            )}
           </label>
           <label className='form-control w-full'>
             <div className='label'>
