@@ -2,13 +2,14 @@ import React from 'react'
 import { PiLockKeyDuotone } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 import AlertMessage from '../../../../components/alert/AlertMessage'
-import { LocaleContext } from '../../../../context/LocaleContext'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { POST_LOGIN } from '../../../../services/auth.services'
 import { setStorage } from '../../../../utils/storage'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import useLocale from '../../../../hooks/useLocale'
+
 
 const FormSchema = z.object({
   email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Invalid email' }),
@@ -24,10 +25,11 @@ type Inputs = {
 }
 
 const FormLogin = () => {
+  const queryClient = useQueryClient()
   const [loading, setLoading] = React.useState<boolean>(false)
   const [errorMessage, setErrorMessage] = React.useState<string>('')
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
-  const { isLocale } = React.useContext(LocaleContext)
+  const { isLocale } = useLocale()
 
   const {
     register,
@@ -47,7 +49,8 @@ const FormLogin = () => {
       setLoading(false)
       const accessToken = data.data.accessToken
       setStorage('accessToken', accessToken)
-      window.location.href = '/'
+      queryClient.invalidateQueries({ queryKey: ['GET_USER_LOGGED_IN'] })
+      // window.location.href = '/'
     },
     onError: (error: string) => {
       setLoading(false)
@@ -70,7 +73,7 @@ const FormLogin = () => {
         <div className='bg-secondary rounded-full p-1 text-secondary-content mb-2'>
           <PiLockKeyDuotone size={30} />
         </div>
-        <p className='text-2xl font-semibold'>Login</p>
+        <p className='text-2xl font-semibold'>{isLocale === 'id' ? 'Masuk' : 'Login'}</p>
         <form onSubmit={handleSubmit(onSubmit)} className='w-11/12 md:max-w-md' noValidate>
           <label className='form-control w-full'>
             <div className='label'>
@@ -118,7 +121,7 @@ const FormLogin = () => {
           </label>
           <button disabled={loading} type='submit' className='btn btn-primary w-full mt-5'>
             {loading && <span className='loading loading-spinner'></span>}
-            {loading ? 'loading...' : 'Login'}
+            {loading ? 'loading...' : isLocale === 'id' ? 'Masuk' : 'Login'}
           </button>
         </form>
         <div className='flex gap-1 mt-5'>

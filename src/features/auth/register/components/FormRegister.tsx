@@ -2,13 +2,13 @@ import React from 'react'
 import { PiLockKeyDuotone } from 'react-icons/pi'
 import { Link, useNavigate } from 'react-router-dom'
 import AlertMessage from '../../../../components/alert/AlertMessage'
-import { LocaleContext } from '../../../../context/LocaleContext'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useMutation } from '@tanstack/react-query'
 import { POST_REGISTER_USER } from '../../../../services/register.services'
 import { openAlert } from '../../../../utils/handleModal'
+import useLocale from '../../../../hooks/useLocale'
 
 const FormSchema = z
   .object({
@@ -40,7 +40,7 @@ const FormRegister = () => {
   const [errorMessage, setErrorMessage] = React.useState<string>('')
   const [loading, setLoading] = React.useState<boolean>(false)
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
-  const { isLocale } = React.useContext(LocaleContext)
+  const { isLocale } = useLocale()
 
   const {
     register,
@@ -89,7 +89,7 @@ const FormRegister = () => {
         <div className='bg-secondary rounded-full p-1 text-secondary-content mb-2'>
           <PiLockKeyDuotone size={30} />
         </div>
-        <p className='text-2xl font-semibold'>Register</p>
+        <p className='text-2xl font-semibold'>{isLocale === 'id' ? 'Daftar' : 'Register'}</p>
         <form onSubmit={handleSubmit(onSubmit)} className='w-11/12 md:max-w-md' noValidate>
           <label className='form-control w-full'>
             <div className='label'>
@@ -157,7 +157,7 @@ const FormRegister = () => {
           </label>
           <button disabled={loading} type='submit' className='btn btn-primary w-full mt-5'>
             {loading && <span className='loading loading-spinner'></span>}
-            {loading ? 'loading...' : 'Register'}
+            {loading ? 'loading...' : isLocale === 'id' ? 'Daftar' : 'Register'}
           </button>
         </form>
         <div className='flex gap-1 mt-5 mb-5'>
