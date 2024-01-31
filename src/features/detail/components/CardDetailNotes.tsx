@@ -3,7 +3,7 @@ import { ShowFormattedDate } from '../../../utils/formateDate'
 // import { useNavigate } from 'react-router-dom'
 import { MdArchive, MdUnarchive, MdDelete } from 'react-icons/md'
 import { IoMdClose } from 'react-icons/io'
-// import ConfirmDelete from './ConfirmDelete'
+import ConfirmDelete from './ConfirmDelete'
 import { openAlert } from '../../../utils/handleModal'
 import parser from 'html-react-parser'
 import useLocale from '../../../hooks/useLocale'
@@ -16,7 +16,7 @@ type CardDetailNotesProps = {
   isArchived: boolean
 }
 
-const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ title, body, createdAt, isArchived }) => {
+const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, createdAt, isArchived }) => {
   const { isLocale } = useLocale()
   // const navigate = useNavigate()
 
@@ -61,7 +61,7 @@ const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ title, body, createdA
           </div>
         </div>
       </div>
-      {/* <ConfirmDelete id={id} /> */}
+      <ConfirmDelete id={id} />
     </div>
   )
 }
