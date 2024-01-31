@@ -1,20 +1,20 @@
-import { useContext, useState } from 'react'
+import React from 'react'
 import { IoSearchOutline, IoLanguageOutline } from 'react-icons/io5'
 import { IoMdArrowBack } from 'react-icons/io'
 import { MdOutlineLogout } from 'react-icons/md'
-import { LocaleContext } from '../../context/LocaleContext'
 import { FaCheck } from 'react-icons/fa6'
 import { setDataLocale } from '../../utils/storage'
 import SelectTheme from '../theme/SelectTheme'
 import { removeStorage } from '../../utils/storage'
 import useAuth from '../../hooks/useAuth'
 import useUser from '../../hooks/useUser'
+import useLocale from '../../hooks/useLocale'
 
 const NavbarMobile = () => {
   const { setAuthenticated } = useAuth()
   const { userLogin } = useUser()
-  const { isLocale, setIsLocale } = useContext(LocaleContext)
-  const [openSearchBar, setOpenSearchBar] = useState(false)
+  const { isLocale, setIsLocale } = useLocale()
+  const [openSearchBar, setOpenSearchBar] = React.useState<boolean>(false)
 
   const handleLogout = () => {
     setAuthenticated(false)
@@ -105,7 +105,7 @@ const NavbarMobile = () => {
               <div className='divider -my-1'></div>
               <li>
                 <button className='flex justify-between' onClick={handleLogout}>
-                  <span>Sign out</span>
+                  <span>{isLocale === 'id' ? 'Keluar' : 'Logout'}</span>
                   <MdOutlineLogout size={20} color='red' />
                 </button>
               </li>
