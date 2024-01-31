@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { POST_LOGIN } from '../../../../services/auth.services'
 import { setStorage } from '../../../../utils/storage'
+import { useMutation } from '@tanstack/react-query'
 
 const FormSchema = z.object({
   email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Invalid email' }),
@@ -27,32 +28,33 @@ const FormLogin = () => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = React.useContext(LocaleContext)
 
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm<Inputs>({
-      resolver: zodResolver(FormSchema),
-      defaultValues: {
-        email: '',
-        password: '',
-      },
-    })
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
 
-    const onSubmit: SubmitHandler<Inputs> = async (data) => {
-      const { email, password } = data
-      try {
-        const response = await POST_LOGIN(email, password)
-        if (response.status === 'success') {
-          const accessToken = response.data.accessToken
-          setStorage('accessToken', accessToken)
-          window.location.href = '/'
-        }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        setErrorMessage(error)
-      }
-    }
+  const { mutateAsync: authUser } = useMutation({
+    mutationFn: POST_LOGIN,
+    onSuccess: (data) => {
+      const accessToken = data.data.accessToken
+      setStorage('accessToken', accessToken)
+      window.location.href = '/'
+    },
+    onError: (error: string) => {
+      setErrorMessage(error)
+    },
+  })
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    await authUser(data)
+  }
 
   const handleCheckboxChange = () => {
     setShowPassword(!showPassword)
