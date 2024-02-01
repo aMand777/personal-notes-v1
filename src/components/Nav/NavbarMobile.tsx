@@ -6,19 +6,19 @@ import { FaCheck } from 'react-icons/fa6'
 import { setDataLocale } from '../../utils/storage'
 import SelectTheme from '../theme/SelectTheme'
 import { removeStorage } from '../../utils/storage'
-import useAuth from '../../hooks/useAuth'
 import useUser from '../../hooks/useUser'
 import useLocale from '../../hooks/useLocale'
+import { useQueryClient } from '@tanstack/react-query'
 
 const NavbarMobile = () => {
-  const { setAuthenticated } = useAuth()
+    const queryClient = useQueryClient()
   const { userLogin } = useUser()
   const { isLocale, setIsLocale } = useLocale()
   const [openSearchBar, setOpenSearchBar] = React.useState<boolean>(false)
 
   const handleLogout = () => {
-    setAuthenticated(false)
     removeStorage('accessToken')
+    queryClient.invalidateQueries({ queryKey: ['GET_USER_LOGGED_IN'] })
   }
 
   const handleClickEn = () => {
@@ -35,19 +35,19 @@ const NavbarMobile = () => {
         <div className='flex-1 ml-1'>{!openSearchBar && <SelectTheme />}</div>
         <div className='flex-none gap-2'>
           <label htmlFor='search' onClick={() => setOpenSearchBar(true)}>
-            <IoSearchOutline size={30} className='text-accent-content cursor-pointer' />
+            <IoSearchOutline size={30} className='cursor-pointer text-accent-content' />
           </label>
           {openSearchBar === true && (
-            <div className='form-control absolute left-1 flex right-1 z-50 flex-row items-center gap-1'>
+            <div className='absolute z-50 flex flex-row items-center gap-1 form-control left-1 right-1'>
               <button
                 onClick={() => setOpenSearchBar(false)}
-                className='btn btn-accent z-50 text-accent-content'>
+                className='z-50 btn btn-accent text-accent-content'>
                 <IoMdArrowBack size={30} />
               </button>
-              <div className='form-control w-full relative'>
+              <div className='relative w-full form-control'>
                 <label
                   htmlFor='search'
-                  className='absolute top-1/2 transform -translate-y-1/2 text-slate-500 z-40 left-3'>
+                  className='absolute z-40 transform -translate-y-1/2 top-1/2 text-slate-500 left-3'>
                   <IoSearchOutline size={20} className='cursor-text' />
                 </label>
                 <input
@@ -56,7 +56,7 @@ const NavbarMobile = () => {
                   placeholder={
                     isLocale === 'id' ? 'Cari berdasarkan judul ..' : 'Search by title ..'
                   }
-                  className='input input-bordered w-full mx-auto pl-10 absolute top-1/2 transform -translate-y-1/2'
+                  className='absolute w-full pl-10 mx-auto transform -translate-y-1/2 input input-bordered top-1/2'
                 />
               </div>
             </div>
@@ -98,11 +98,11 @@ const NavbarMobile = () => {
             <ul
               tabIndex={0}
               className='mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 overflow-hidden'>
-              <div className='flex justify-between text-base cursor-default items-center px-3 py-2'>
+              <div className='flex items-center justify-between px-3 py-2 text-base cursor-default'>
                 <p className='italic truncate'>{ userLogin?.name }</p>
-                <span className='badge badge-success badge-xs ml-5 animate-pulse'></span>
+                <span className='ml-5 badge badge-success badge-xs animate-pulse'></span>
               </div>
-              <div className='divider -my-1'></div>
+              <div className='-my-1 divider'></div>
               <li>
                 <button className='flex justify-between' onClick={handleLogout}>
                   <span>{isLocale === 'id' ? 'Keluar' : 'Logout'}</span>
