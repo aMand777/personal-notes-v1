@@ -17,17 +17,17 @@ type Note = {
 const Notes = () => {
   const { isLocale } = useLocale()
   const [activeNotes, setActiveNotes] = React.useState<[]>([])
-
-  const { isLoading } = useQuery({
-    queryKey: ['GET_NOTES'],
-    queryFn: async () => {
-      const result = await GET_NOTES()
-      if (result.status === 'success') {
-        setActiveNotes(result.data)
-      }
-      return result
-    },
-  })
+  
+    const { isLoading, data } = useQuery({
+      queryKey: ['GET_NOTES'],
+      queryFn: async () => {
+        const result = await GET_NOTES()
+        if (result.status === 'success') {
+          setActiveNotes(result.data)
+        }
+        return result
+      },
+    })
 
   return (
     <>
@@ -47,8 +47,8 @@ const Notes = () => {
                 body={note.body}
               />
             ))
-          : isLoading && <NotesSkeleton loop={9} />}
-        {activeNotes.length < 1 && !isLoading && (
+          : (<NotesSkeleton loop={9} />)}
+        {!data && !isLoading && (
           <InfoNotes info={isLocale === 'id' ? 'Tidak ada catatan.' : 'No notes.'} />
         )}
       </div>
