@@ -18,7 +18,7 @@ const Detail = () => {
   }
   const [detailNote, setDetailNote] = React.useState(initialNotes)
 
-  const { isLoading } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ['GET_NOTES_BY_ID', id],
     queryFn: async () => {
       const result = await GET_NOTES_BY_ID(id)
@@ -26,7 +26,7 @@ const Detail = () => {
       return result
     }
   })
-
+  
   return (
     <>
       <div>
@@ -38,10 +38,9 @@ const Detail = () => {
             body={detailNote.body}
             isArchived={detailNote.archived}
           />
-        ) : (
-          isLoading && <DetailNotesSkeleton />
+        ) : (<DetailNotesSkeleton />
         )}
-        {detailNote.title.length < 1 && !isLoading && <NotFoundNotes />}
+        {!data && !isLoading && <NotFoundNotes />}
       </div>
     </>
   )
