@@ -1,6 +1,6 @@
 import React from 'react'
 import { ShowFormattedDate } from '../../../utils/formateDate'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { MdArchive, MdUnarchive, MdDelete } from 'react-icons/md'
 import { IoMdClose } from 'react-icons/io'
 import ConfirmDelete from './ConfirmDelete'
@@ -18,12 +18,11 @@ type CardDetailNotesProps = {
 
 const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, createdAt, isArchived }) => {
   const { isLocale } = useLocale()
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
-  // const handleGoBack = () => {
-  //   navigate(-1)
-  // }
-
+  const handleGoBack = () => {
+    navigate(-1)
+  }
 
   const dataTipArchived = isLocale === 'id' ? 'Arsipkan' : 'Archive'
   const dataTipUnArchived = isLocale === 'id' ? 'Aktifkan' : 'Unarchive'
@@ -32,6 +31,7 @@ const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, crea
     <div className='container mx-auto'>
       <div className='card w-11/12 md:w-2/3 lg:w-1/2 bg-secondary shadow-xl mx-auto min-h-max my-10'>
         <button
+          onClick={handleGoBack}
           data-tip={isLocale === 'id' ? 'Tutup' : 'Close'}
           className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-lg tooltip'>
           <IoMdClose size={30} className='text-secondary-content' />

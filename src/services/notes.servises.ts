@@ -9,3 +9,13 @@ export const GET_NOTES = async () => {
     throw error.response?.data.message
   }
 }
+
+export const GET_NOTES_BY_ID = async (id: string | undefined) => {
+  try {
+    const { data } = await instanceApi.get(`/notes/${id}`)
+    return data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw error.response?.data.message
+  }
+}
