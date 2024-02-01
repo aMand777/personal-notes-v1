@@ -67,14 +67,14 @@ const FormLogin = () => {
   }
 
   return (
-    <div className='w-full flex justify-center items-center mt-10'>
-      <div className='flex flex-col justify-center items-center container'>
-        <div className='bg-secondary rounded-full p-1 text-secondary-content mb-2'>
+    <div className='flex items-center justify-center w-full mt-10'>
+      <div className='container flex flex-col items-center justify-center'>
+        <div className='p-1 mb-2 rounded-full bg-secondary text-secondary-content'>
           <PiLockKeyDuotone size={30} />
         </div>
         <p className='text-2xl font-semibold'>{isLocale === 'id' ? 'Masuk' : 'Login'}</p>
         <form onSubmit={handleSubmit(onSubmit)} className='w-11/12 md:max-w-md' noValidate>
-          <label className='form-control w-full'>
+          <label className='w-full form-control'>
             <div className='label'>
               <span className='label-text'>Email</span>
             </div>
@@ -92,7 +92,7 @@ const FormLogin = () => {
               )
             )}
           </label>
-          <label className='form-control w-full'>
+          <label className='w-full form-control'>
             <div className='label'>
               <span className='label-text'>Password</span>
             </div>
@@ -110,7 +110,7 @@ const FormLogin = () => {
               )
             )}
           </label>
-          <label className='label cursor-pointer'>
+          <label className='cursor-pointer label'>
             <span className='label-text'>Show Password</span>
             <input
               onChange={handleCheckboxChange}
@@ -118,7 +118,7 @@ const FormLogin = () => {
               className='checkbox checkbox-accent'
             />
           </label>
-          <button disabled={loading} type='submit' className='btn btn-primary w-full mt-5'>
+          <button disabled={loading} type='submit' className='w-full mt-5 btn btn-primary'>
             {loading && <span className='loading loading-spinner'></span>}
             {loading ? 'loading...' : isLocale === 'id' ? 'Masuk' : 'Login'}
           </button>

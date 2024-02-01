@@ -7,9 +7,9 @@ const NotFound = () => {
   const { isLocale } = React.useContext(LocaleContext)
 
   return (
-    <div className='w-screen h-screen absolute top-0 z-50 bg-base-300'>
-      <div className='w-full h-full flex flex-col justify-center items-center'>
-        <div className='flex justify-center items-center'>
+    <div className='absolute top-0 z-50 w-screen h-screen bg-base-300'>
+      <div className='flex flex-col items-center justify-center w-full h-full'>
+        <div className='flex items-center justify-center'>
           <TbError404 size={30} className='text-base-content' />
           <div className='divider divider-horizontal divider-base-content'></div>
           <p className='text-base-content'>
@@ -19,7 +19,7 @@ const NotFound = () => {
           </p>
         </div>
         <Link to='/' className='link link-accent'>
-          {isLocale === 'id' ? 'Kembali ke beranda' : 'Back to home'}
+          {isLocale === 'id' ? 'Kembali' : 'Back'}
         </Link>
       </div>
     </div>

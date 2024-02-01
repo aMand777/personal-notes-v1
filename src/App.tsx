@@ -7,6 +7,7 @@ import NotFound from './components/NotFound/NotFound'
 import RequireAuth from './components/routes/RequireAuth'
 import Notes from './features/notes/pages/Notes'
 import Detail from './features/detail/page/Detail'
+import Archived from './features/archived/page/Archived'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
           <Route element={<RequireAuth />}>
             <Route path='/' element={<Notes />} />
             <Route path='/notes' element={<Notes />} />
+            <Route path='/notes/archived' element={<Archived />} />
             <Route path='/notes/detail/:id' element={<Detail />} />
           </Route>
           {/* not found route page */}

@@ -6,13 +6,11 @@ import useUser from '../hooks/useUser'
 type AuthContext = {
   isLoading: boolean
   isAuthenticated: boolean
-  setAuthenticated: (value: boolean) => void
 }
 
 const InitialAuthContext = {
   isLoading: true,
   isAuthenticated: false,
-  setAuthenticated: (value: boolean) => value,
 }
 
 export const AuthContext = React.createContext<AuthContext>(InitialAuthContext)
@@ -21,28 +19,26 @@ type AuthContextProviderProps = {
   children: React.ReactNode
 }
 const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) => {
-  const [isAuth, setIsAuth] = React.useState<boolean>(false)
   const { setUserLogin } = useUser()
 
-  const { isLoading } = useQuery({
+  const { isLoading, isSuccess } = useQuery({
     queryKey: ['GET_USER_LOGGED_IN'],
     queryFn: async () => {
       const result = await GET_USER_LOGGED_IN()
       if (result.status === 'success') {
-        setIsAuth(true)
         setUserLogin(result?.data)
       }
       return result
     },
+    retry: false,
   })
 
   const contextValue = React.useMemo(
     () => ({
       isLoading,
-      isAuthenticated: isAuth,
-      setAuthenticated: (value: boolean) => setIsAuth(value),
+      isAuthenticated: isSuccess,
     }),
-    [isAuth, isLoading],
+    [isLoading, isSuccess],
   )
 
   return <AuthContext.Provider value={contextValue}> {children} </AuthContext.Provider>
