@@ -29,3 +29,23 @@ export const GET_NOTES_BY_ID = async (id: string | undefined) => {
     throw error.response?.data.message
   }
 }
+
+export const ARCHIVE_NOTE = async (id: string) => {
+  try {
+    const { data } = await instanceApi.post(`/notes/${id}/archive`)
+    return data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw error.response?.data.message
+  }
+}
+
+export const UNARCHIVE_NOTE = async (id: string) => {
+  try {
+    const { data } = await instanceApi.post(`/notes/${id}/unarchive`)
+    return data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw error.response?.data.message
+  }
+}
