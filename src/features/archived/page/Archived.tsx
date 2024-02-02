@@ -25,7 +25,7 @@ const Archived = () => {
     <>
       <div className='flex items-center justify-center mt-5'>
         <span className='text-xl font-semibold text-accent'>
-          {isLocale === 'id' ? 'Catatan Aktif' : 'Active Note'}
+          {isLocale === 'id' ? 'Catatan Arsip' : 'Archived Note'}
         </span>
       </div>
       <div className='grid grid-cols-1 gap-5 mt-5 mb-16 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
