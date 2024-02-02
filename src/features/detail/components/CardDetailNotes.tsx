@@ -7,6 +7,8 @@ import ConfirmDelete from './ConfirmDelete'
 import { openAlert } from '../../../utils/handleModal'
 import parser from 'html-react-parser'
 import useLocale from '../../../hooks/useLocale'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { ARCHIVE_NOTE, UNARCHIVE_NOTE } from '../../../services/notes.servises'
 
 type CardDetailNotesProps = {
   id: string
@@ -17,6 +19,7 @@ type CardDetailNotesProps = {
 }
 
 const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, createdAt, isArchived }) => {
+  const queryClient = useQueryClient()
   const { isLocale } = useLocale()
   const navigate = useNavigate()
 
@@ -27,20 +30,48 @@ const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, crea
   const dataTipArchived = isLocale === 'id' ? 'Arsipkan' : 'Archive'
   const dataTipUnArchived = isLocale === 'id' ? 'Aktifkan' : 'Unarchive'
 
+  const { mutateAsync: postArchiveNote } = useMutation({
+    mutationKey: ['ARCHIVE_NOTE', id],
+    mutationFn: async () => await ARCHIVE_NOTE(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['GET_ACTIVE_NOTES'] }),
+      queryClient.invalidateQueries({ queryKey: ['GET_ARCHIVE_NOTES'] })
+      handleGoBack()
+    }
+  })
+
+  const { mutateAsync: postUnarchiveNote } = useMutation({
+    mutationKey: ['ARCHIVE_NOTE', id],
+    mutationFn: async () => await UNARCHIVE_NOTE(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['GET_ACTIVE_NOTES'] }),
+      queryClient.invalidateQueries({ queryKey: ['GET_ARCHIVE_NOTES'] })
+      handleGoBack()
+    }
+  })
+  
+  const handleArchivedNote = async () => {
+    if (isArchived === false) {
+      await postArchiveNote()
+    } else {
+      postUnarchiveNote()
+    }
+  }
+
   return (
     <div className='container mx-auto'>
-      <div className='card w-11/12 md:w-2/3 lg:w-1/2 bg-secondary shadow-xl mx-auto min-h-max my-10'>
+      <div className='w-11/12 mx-auto my-10 shadow-xl card md:w-2/3 lg:w-1/2 bg-secondary min-h-max'>
         <button
           onClick={handleGoBack}
           data-tip={isLocale === 'id' ? 'Tutup' : 'Close'}
-          className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-lg tooltip'>
+          className='absolute text-lg btn btn-sm btn-circle btn-ghost right-2 top-2 tooltip'>
           <IoMdClose size={30} className='text-secondary-content' />
         </button>
         <div className='card-body'>
           <h2 className='card-title text-secondary-content'>{parser(title)}</h2>
           <p className='text-secondary-content'>{ShowFormattedDate(createdAt)}</p>
           <p className='text-secondary-content'>{parser(body)}</p>
-          <div className='card-actions justify-end mt-2 gap-5'>
+          <div className='justify-end gap-5 mt-2 card-actions'>
             <div className='tooltip' data-tip={isLocale === 'id' ? 'Hapus' : 'Delete'}>
               <button
                 onClick={() => openAlert('modal-confirm')}
@@ -50,6 +81,7 @@ const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, crea
             </div>
             <div className='tooltip' data-tip={isArchived ? dataTipUnArchived : dataTipArchived}>
               <button
+                onClick={handleArchivedNote}
                 className='btn btn-ghost hover:text-secondary-content'>
                 {isArchived ? (
                   <MdUnarchive size={30} className='text-secondary-content' />

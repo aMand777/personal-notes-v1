@@ -17,7 +17,7 @@ const Notes = () => {
   const { isLocale } = useLocale()
 
   const { isLoading, data: activeNotes } = useQuery({
-    queryKey: ['GET_NOTES'],
+    queryKey: ['GET_ACTIVE_NOTES'],
     queryFn: async () => await GET_ACTIVE_NOTES(),
   })
 
@@ -29,19 +29,17 @@ const Notes = () => {
         </span>
       </div>
       <div className='grid grid-cols-1 gap-5 mt-5 mb-16 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
-        {activeNotes?.data?.length > 0 && !isLoading ? (
-          activeNotes?.data?.map((note: Note) => (
-            <CardNotes
-              key={note.id}
-              id={note.id}
-              title={note.title}
-              createdAt={note.createdAt}
-              body={note.body}
-            />
-          ))
-        ) : (
-          <NotesSkeleton loop={9} />
-        )}
+        {activeNotes?.data?.length > 0 && !isLoading
+          ? activeNotes?.data?.map((note: Note) => (
+              <CardNotes
+                key={note.id}
+                id={note.id}
+                title={note.title}
+                createdAt={note.createdAt}
+                body={note.body}
+              />
+            ))
+          : isLoading && <NotesSkeleton loop={9} />}
         {activeNotes?.data?.length < 1 && !isLoading && (
           <InfoNotes info={isLocale === 'id' ? 'Tidak ada catatan.' : 'No notes.'} />
         )}
