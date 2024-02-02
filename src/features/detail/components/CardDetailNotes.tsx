@@ -30,8 +30,7 @@ const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, crea
   const dataTipArchived = isLocale === 'id' ? 'Arsipkan' : 'Archive'
   const dataTipUnArchived = isLocale === 'id' ? 'Aktifkan' : 'Unarchive'
 
-  const { mutateAsync: postArchiveNote } = useMutation({
-    mutationKey: ['ARCHIVE_NOTE', id],
+  const { mutateAsync: toggleArchiveNote } = useMutation({
     mutationFn: async () => {
       if (isArchived === false) {
         await ARCHIVE_NOTE(id)
@@ -41,14 +40,13 @@ const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, crea
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['GET_ACTIVE_NOTES'] }),
-      queryClient.invalidateQueries({ queryKey: ['GET_ARCHIVE_NOTES'] })
+      queryClient.invalidateQueries({ queryKey: ['GET_ACTIVE_NOTES', 'GET_ARCHIVED_NOTES'] }),
       handleGoBack()
     }
   })
   
   const handleArchivedNote = async () => {
-    await postArchiveNote()
+    await toggleArchiveNote()
   }
 
   return (
