@@ -2,66 +2,33 @@ import React from 'react'
 import { PiLockKeyDuotone } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 import AlertMessage from '../../../../components/alert/AlertMessage'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { POST_LOGIN } from '../../../../services/auth.services'
-import { setStorage } from '../../../../utils/storage'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { SubmitHandler, UseFormRegister, FieldErrors, UseFormHandleSubmit } from 'react-hook-form'
 import useLocale from '../../../../hooks/useLocale'
-
-const FormSchema = z.object({
-  email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Invalid email' }),
-  password: z
-    .string()
-    .min(1, { message: 'Password is required' })
-    .min(6, { message: 'Password must be at least 6 characters' }),
-})
 
 type Inputs = {
   email: string
   password: string
 }
 
-const FormLogin = () => {
-  const queryClient = useQueryClient()
-  const [loading, setLoading] = React.useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = React.useState<string>('')
+type FormLoginProps = {
+  loading: boolean
+  register: UseFormRegister<Inputs>
+  errors: FieldErrors<Inputs>
+  onSubmit: SubmitHandler<Inputs>
+  handleSubmit: UseFormHandleSubmit<Inputs, undefined>
+  errorResponse: string
+}
+
+const FormLogin: React.FC<FormLoginProps> = ({
+  loading,
+  register,
+  errors,
+  onSubmit,
+  handleSubmit,
+  errorResponse,
+}) => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = useLocale()
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  })
-
-  const { mutateAsync: authUser } = useMutation({
-    mutationFn: POST_LOGIN,
-    onSuccess: (data) => {
-      setLoading(false)
-      const accessToken = data.data.accessToken
-      setStorage('accessToken', accessToken)
-      queryClient.invalidateQueries({
-        queryKey: ['GET_USER_LOGGED_IN', 'GET_ACTIVE_NOTES', 'GET_ARCHIVED_NOTES'],
-      })
-    },
-    onError: (error: string) => {
-      setLoading(false)
-      setErrorMessage(error)
-    },
-  })
-
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    setLoading(true)
-    await authUser(data)
-  }
 
   const handleCheckboxChange = () => {
     setShowPassword(!showPassword)
@@ -88,8 +55,8 @@ const FormLogin = () => {
             {errors.email ? (
               <AlertMessage message={errors.email?.message} />
             ) : (
-              errorMessage?.toLowerCase().includes('email') && (
-                <AlertMessage message={errorMessage} />
+              errorResponse?.toLowerCase().includes('email') && (
+                <AlertMessage message={errorResponse} />
               )
             )}
           </label>
@@ -106,8 +73,8 @@ const FormLogin = () => {
             {errors.password ? (
               <AlertMessage message={errors.password?.message} />
             ) : (
-              errorMessage?.toLowerCase().includes('password') && (
-                <AlertMessage message={errorMessage} />
+              errorResponse?.toLowerCase().includes('password') && (
+                <AlertMessage message={errorResponse} />
               )
             )}
           </label>
