@@ -19,6 +19,20 @@ export const GET_ARCHIVED_NOTES = async () => {
   }
 }
 
+type Note = {
+  title: string
+  body: string
+}
+
+export const CREATE_NOTES = async (note: Note) => {
+  try {
+    const { data } = await instanceApi.post('/notes', note)
+    return data
+  } catch (error: any) {
+    throw error.response?.data.message
+  }
+}
+
 export const GET_NOTES_BY_ID = async (id: string | undefined) => {
   try {
     const { data } = await instanceApi.get(`/notes/${id}`)

@@ -21,10 +21,11 @@ const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({ id }) => {
   const { mutateAsync: deleteNote } = useMutation({
     mutationFn: async () => await DELETE_NOTE(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['GET_ACTIVE_NOTES', 'GET_ARCHIVED_NOTES'] })
+      queryClient.invalidateQueries({ queryKey: ['GET_ACTIVE_NOTES'] })
+      queryClient.invalidateQueries({ queryKey: ['GET_ARCHIVED_NOTES'] })
       setLoading(false)
       handleGoBack()
-    }
+    },
   })
 
   const handleDeleteNote = async () => {
@@ -48,7 +49,10 @@ const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({ id }) => {
               : 'Are you sure you want to delete this note?'}
           </p>
           <div className='flex justify-end gap-3'>
-            <button disabled={loading} onClick={handleDeleteNote} className='btn btn-outline btn-error'>
+            <button
+              disabled={loading}
+              onClick={handleDeleteNote}
+              className='btn btn-outline btn-error'>
               {loading && <span className='loading loading-spinner'></span>}
               {loading ? 'loading...' : isLocale === 'id' ? 'Hapus' : 'Delete'}
             </button>

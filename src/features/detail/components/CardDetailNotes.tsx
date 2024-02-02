@@ -18,7 +18,13 @@ type CardDetailNotesProps = {
   isArchived: boolean
 }
 
-const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, createdAt, isArchived }) => {
+const CardDetailNotes: React.FC<CardDetailNotesProps> = ({
+  id,
+  title,
+  body,
+  createdAt,
+  isArchived,
+}) => {
   const queryClient = useQueryClient()
   const { isLocale } = useLocale()
   const navigate = useNavigate()
@@ -34,17 +40,17 @@ const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, crea
     mutationFn: async () => {
       if (isArchived === false) {
         await ARCHIVE_NOTE(id)
-        
       } else {
         await UNARCHIVE_NOTE(id)
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['GET_ACTIVE_NOTES', 'GET_ARCHIVED_NOTES'] }),
+      queryClient.invalidateQueries({ queryKey: ['GET_ACTIVE_NOTES'] }),
+      queryClient.invalidateQueries({ queryKey: ['GET_ARCHIVED_NOTES'] }),
       handleGoBack()
-    }
+    },
   })
-  
+
   const handleArchivedNote = async () => {
     await toggleArchiveNote()
   }
