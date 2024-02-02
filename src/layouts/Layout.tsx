@@ -12,7 +12,7 @@ const Layout = () => {
 
   return (
     <>
-      <header className={`${pathAuth ? 'hidden' : ''} sticky top-0 z-40`}>
+      <header className={`${pathAuth || pathDetail ? 'hidden' : ''} sticky top-0 z-40`}>
         <Navbar />
         <NavbarMobile />
       </header>

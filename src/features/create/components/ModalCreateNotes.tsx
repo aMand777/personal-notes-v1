@@ -41,17 +41,17 @@ const ModalCreateNotes = () => {
               contentEditable
               // onInput={onInputBody}
             />
-            {/* <div className='flex justify-end mt-5'>
-              {title?.length > 0 && body?.length > 0 ? (
+            <div className='flex justify-end mt-5'>
+              {/* {title?.length > 0 && body?.length > 0 ? (
                 <button type='submit' className='btn btn-info'>
                   {isLocale === 'id' ? 'Simpan' : 'Save'}
                 </button>
-              ) : (
+              ) : ( */}
                 <div className='opacity-50 cursor-not-allowed btn btn-info'>
                   {isLocale === 'id' ? 'Simpan' : 'Save'}
                 </div>
-              )}
-            </div> */}
+              {/* // )} */}
+            </div>
           </form>
         </div>
       </dialog>
