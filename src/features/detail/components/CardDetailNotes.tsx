@@ -32,17 +32,14 @@ const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, crea
 
   const { mutateAsync: postArchiveNote } = useMutation({
     mutationKey: ['ARCHIVE_NOTE', id],
-    mutationFn: async () => await ARCHIVE_NOTE(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['GET_ACTIVE_NOTES'] }),
-      queryClient.invalidateQueries({ queryKey: ['GET_ARCHIVE_NOTES'] })
-      handleGoBack()
-    }
-  })
-
-  const { mutateAsync: postUnarchiveNote } = useMutation({
-    mutationKey: ['ARCHIVE_NOTE', id],
-    mutationFn: async () => await UNARCHIVE_NOTE(id),
+    mutationFn: async () => {
+      if (isArchived === false) {
+        await ARCHIVE_NOTE(id)
+        
+      } else {
+        await UNARCHIVE_NOTE(id)
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['GET_ACTIVE_NOTES'] }),
       queryClient.invalidateQueries({ queryKey: ['GET_ARCHIVE_NOTES'] })
@@ -51,11 +48,7 @@ const CardDetailNotes: React.FC<CardDetailNotesProps> = ({ id, title, body, crea
   })
   
   const handleArchivedNote = async () => {
-    if (isArchived === false) {
-      await postArchiveNote()
-    } else {
-      postUnarchiveNote()
-    }
+    await postArchiveNote()
   }
 
   return (

@@ -41,7 +41,7 @@ const Archived = () => {
             ))
           : isLoading && <NotesSkeleton loop={9} />}
         {archivedNotes?.data?.length < 1 && !isLoading && (
-          <InfoNotes info={isLocale === 'id' ? 'Tidak ada catatan.' : 'No notes.'} />
+          <InfoNotes info={isLocale === 'id' ? 'Tidak ada catatan.' : 'Empty notes.'} />
         )}
       </div>
     </>
