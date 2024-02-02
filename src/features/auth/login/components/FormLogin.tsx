@@ -48,8 +48,9 @@ const FormLogin = () => {
       setLoading(false)
       const accessToken = data.data.accessToken
       setStorage('accessToken', accessToken)
-      queryClient.invalidateQueries({ queryKey: ['GET_USER_LOGGED_IN'] })
-      queryClient.invalidateQueries({ queryKey: ['GET_NOTES'] })
+      queryClient.invalidateQueries({
+        queryKey: ['GET_USER_LOGGED_IN', 'GET_ACTIVE_NOTES', 'GET_ARCHIVED_NOTES'],
+      })
     },
     onError: (error: string) => {
       setLoading(false)
