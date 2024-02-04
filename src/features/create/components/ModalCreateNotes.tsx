@@ -12,7 +12,6 @@ type ModalCreateNotesProps = {
   loading: boolean
 }
 
-
 const ModalCreateNotes: React.FC<ModalCreateNotesProps> = ({
   onSubmit,
   onInputTitle,
@@ -60,12 +59,12 @@ const ModalCreateNotes: React.FC<ModalCreateNotesProps> = ({
             />
             <div className='mt-5 flex justify-end'>
               {title?.length > 0 && body?.length > 0 ? (
-                <button disabled={loading} type='submit' className='btn btn-info'>
+                <button disabled={loading} type='submit' className='btn btn-info min-w-28'>
                   {loading && <span className='loading loading-spinner'></span>}
                   {loading ? 'loading...' : isLocale === 'id' ? 'Simpan' : 'Save'}
                 </button>
               ) : (
-                <div className='btn btn-info opacity-50 cursor-not-allowed'>
+                <div className='btn btn-info opacity-50 cursor-not-allowed min-w-28'>
                   {isLocale === 'id' ? 'Simpan' : 'Save'}
                 </div>
               )}
