@@ -51,9 +51,7 @@ const ModalCreateNotes: React.FC<ModalCreateNotesProps> = ({
             <div
               id='body'
               className='input cursor-text input-ghost w-full h-80 text-xl md:text-3xl overflow-auto px-3'
-              data-placeholder={
-                isLocale === 'id' ? 'Sebenarnya saya adalah ....' : 'Actually I am ...'
-              }
+              data-placeholder={isLocale === 'id' ? 'Ini catatan rahasia' : 'This is a secret note'}
               contentEditable
               onInput={onInputBody}
             />
