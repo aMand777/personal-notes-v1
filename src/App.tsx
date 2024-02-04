@@ -19,7 +19,6 @@ function App() {
           <Route path='/auth/login' element={<Login />} />
           <Route path='/auth/register' element={<Register />} />
           {/* private route */}
-          {/* <Route element={<PrivateRoute isAuthenticated={true} />}> */}
           <Route element={<RequireAuth />}>
             <Route path='/' element={<Notes />} />
             <Route path='/notes' element={<Notes />} />
