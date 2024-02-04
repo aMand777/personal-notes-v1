@@ -46,7 +46,7 @@ const NavbarMobile = () => {
       <div className='navbar bg-accent md:hidden'>
         <div className='flex-1 ml-1'>{!openSearchBar && <SelectTheme />}</div>
         <div className='flex-none gap-2'>
-          <label htmlFor='search' onClick={() => setOpenSearchBar(true)}>
+          <label onClick={() => setOpenSearchBar(true)}>
             <IoSearchOutline size={30} className='cursor-pointer text-accent-content' />
           </label>
           {openSearchBar === true && (
