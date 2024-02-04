@@ -1,6 +1,6 @@
 import React from 'react'
-import NavAuth from '../../../../components/nav/NavAuth.tsx'
-import FormLogin from '../components/FormLogin.tsx'
+import NavAuth from '../../../../components/nav/NavAuth'
+import FormLogin from '../components/FormLogin'
 import useAuth from '../../../../hooks/useAuth'
 import { Navigate } from 'react-router-dom'
 import { SubmitHandler, useForm } from 'react-hook-form'
