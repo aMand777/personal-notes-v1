@@ -17,7 +17,7 @@ type FormRegisterProps = {
   register: UseFormRegister<Inputs>
   errors: FieldErrors<Inputs>
   onSubmit: SubmitHandler<Inputs>
-  handleSubmit: UseFormHandleSubmit<Inputs, undefined>
+  handleSubmit: UseFormHandleSubmit<Inputs>
   errorResponse: string
 }
 
