@@ -6,6 +6,7 @@ import LocaleContextProvider from './context/LocaleContext'
 import { ThemeProvider } from 'next-themes'
 import AuthContextProvider from './context/AuthContext.tsx'
 import UserContextProvider from './context/UserContext.tsx'
+import SearchContextProvider from './context/SearchContext.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -17,13 +18,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <UserContextProvider>
-        <AuthContextProvider>
-          <ThemeProvider attribute='data-theme'>
-            <LocaleContextProvider>
-              <App />
-            </LocaleContextProvider>
-          </ThemeProvider>
-        </AuthContextProvider>
+          <AuthContextProvider>
+            <ThemeProvider attribute='data-theme'>
+              <LocaleContextProvider>
+                <SearchContextProvider>
+                  <App />
+                </SearchContextProvider>
+              </LocaleContextProvider>
+            </ThemeProvider>
+          </AuthContextProvider>
         </UserContextProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

@@ -1,3 +1,4 @@
+import React from 'react'
 import { IoSearchOutline } from 'react-icons/io5'
 import { IoLanguageOutline } from 'react-icons/io5'
 import { MdOutlineLogout } from 'react-icons/md'
@@ -8,11 +9,17 @@ import { FaCheck } from 'react-icons/fa6'
 import useUser from '../../hooks/useUser'
 import useLocale from '../../hooks/useLocale'
 import { useQueryClient } from '@tanstack/react-query'
+import useSearch from '../../hooks/useSearch'
+import { useSearchParams } from 'react-router-dom'
 
 const Navbar = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { querySearch, setQuerySearch } = useSearch()
   const queryClient = useQueryClient()
   const { userLogin } = useUser()
   const { isLocale, setIsLocale } = useLocale()
+  const queryParams = searchParams.get('title' || '')
+
   const handleLogout = () => {
     removeStorage('accessToken')
     queryClient.invalidateQueries({ queryKey: ['GET_USER_LOGGED_IN'] })
@@ -25,6 +32,12 @@ const Navbar = () => {
   const handleClickId = () => {
     setIsLocale('id')
     setDataLocale(isLocale)
+  }
+
+  const handleInputSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const keyword = event?.target !== undefined ? event?.target.value : ''
+    setQuerySearch(keyword.toLowerCase())
+    setSearchParams({ title: keyword.toLowerCase() })
   }
 
   return (
@@ -43,8 +56,10 @@ const Navbar = () => {
             <input
               id='search'
               type='search'
+              value={queryParams || querySearch}
               placeholder={isLocale === 'id' ? 'Cari berdasarkan judul ..' : 'Search by title ..'}
               className='absolute w-full pl-10 mx-auto transform -translate-y-1/2 input input-bordered top-1/2'
+              onChange={handleInputSearch}
             />
           </div>
           <div className='dropdown dropdown-end'>

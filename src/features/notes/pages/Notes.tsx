@@ -1,9 +1,12 @@
+import React from 'react'
 import CardNotes from '../components/CardNotes'
 import InfoNotes from '../components/InfoNotes'
 import NotesSkeleton from '../components/NotesSkeleton'
 import useLocale from '../../../hooks/useLocale'
 import { GET_ACTIVE_NOTES } from '../../../services/notes.servises'
 import { useQuery } from '@tanstack/react-query'
+import useSearch from '../../../hooks/useSearch'
+import { useSearchParams } from 'react-router-dom'
 
 type Note = {
   key: string
@@ -14,12 +17,26 @@ type Note = {
 }
 
 const Notes = () => {
+  const { querySearch } = useSearch()
+  const [searchParams] = useSearchParams()
   const { isLocale } = useLocale()
+  const queryParams = searchParams.get('title' || '')
+  const [notes, setNotes] = React.useState<[]>([])
 
-  const { isLoading, data: activeNotes } = useQuery({
+  const { isLoading } = useQuery({
     queryKey: ['GET_ACTIVE_NOTES'],
-    queryFn: async () => await GET_ACTIVE_NOTES(),
+    queryFn: async () => {
+      const result = await GET_ACTIVE_NOTES()
+      if (result.status === 'success') {
+        setNotes(result.data)
+      }
+      return result
+    },
   })
+
+  const activeNotes = notes.filter((note: Note) =>
+    note.title.toLowerCase().includes(queryParams || querySearch || ''),
+  )
 
   return (
     <>
@@ -29,8 +46,8 @@ const Notes = () => {
         </span>
       </div>
       <div className='grid grid-cols-1 gap-5 mt-5 mb-16 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
-        {activeNotes?.data?.length > 0 && !isLoading
-          ? activeNotes?.data?.map((note: Note) => (
+        {activeNotes?.length > 0 && !isLoading
+          ? activeNotes?.map((note: Note) => (
               <CardNotes
                 key={note.id}
                 id={note.id}
@@ -40,7 +57,7 @@ const Notes = () => {
               />
             ))
           : isLoading && <NotesSkeleton loop={9} />}
-        {activeNotes?.data?.length < 1 && !isLoading && (
+        {activeNotes?.length < 1 && !isLoading && (
           <InfoNotes info={isLocale === 'id' ? 'Tidak ada catatan.' : 'Empty notes.'} />
         )}
       </div>
