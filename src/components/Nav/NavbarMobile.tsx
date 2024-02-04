@@ -9,12 +9,17 @@ import { removeStorage } from '../../utils/storage'
 import useUser from '../../hooks/useUser'
 import useLocale from '../../hooks/useLocale'
 import { useQueryClient } from '@tanstack/react-query'
+import { useSearchParams } from 'react-router-dom'
+import useSearch from '../../hooks/useSearch'
 
 const NavbarMobile = () => {
-    const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { querySearch, setQuerySearch } = useSearch()
   const { userLogin } = useUser()
   const { isLocale, setIsLocale } = useLocale()
   const [openSearchBar, setOpenSearchBar] = React.useState<boolean>(false)
+  const queryParams = searchParams.get('title' || '')
 
   const handleLogout = () => {
     removeStorage('accessToken')
@@ -29,6 +34,13 @@ const NavbarMobile = () => {
     setIsLocale('id')
     setDataLocale(isLocale)
   }
+
+  const handleInputSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const keyword = event?.target !== undefined ? event?.target.value : ''
+    setQuerySearch(keyword.toLowerCase())
+    setSearchParams({ title: keyword.toLowerCase() })
+  }
+
   return (
     <>
       <div className='navbar bg-accent md:hidden'>
@@ -53,10 +65,12 @@ const NavbarMobile = () => {
                 <input
                   id='search'
                   type='search'
+                  value={queryParams || querySearch}
                   placeholder={
                     isLocale === 'id' ? 'Cari berdasarkan judul ..' : 'Search by title ..'
                   }
                   className='absolute w-full pl-10 mx-auto transform -translate-y-1/2 input input-bordered top-1/2'
+                  onChange={handleInputSearch}
                 />
               </div>
             </div>
@@ -99,7 +113,7 @@ const NavbarMobile = () => {
               tabIndex={0}
               className='mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 overflow-hidden'>
               <div className='flex items-center justify-between px-3 py-2 text-base cursor-default'>
-                <p className='italic truncate'>{ userLogin?.name }</p>
+                <p className='italic truncate'>{userLogin?.name}</p>
                 <span className='ml-5 badge badge-success badge-xs animate-pulse'></span>
               </div>
               <div className='-my-1 divider'></div>

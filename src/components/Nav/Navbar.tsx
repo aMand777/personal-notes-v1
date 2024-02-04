@@ -13,9 +13,9 @@ import useSearch from '../../hooks/useSearch'
 import { useSearchParams } from 'react-router-dom'
 
 const Navbar = () => {
+  const queryClient = useQueryClient()
   const [searchParams, setSearchParams] = useSearchParams()
   const { querySearch, setQuerySearch } = useSearch()
-  const queryClient = useQueryClient()
   const { userLogin } = useUser()
   const { isLocale, setIsLocale } = useLocale()
   const queryParams = searchParams.get('title' || '')
@@ -29,6 +29,7 @@ const Navbar = () => {
     setIsLocale('en')
     setDataLocale(isLocale)
   }
+  
   const handleClickId = () => {
     setIsLocale('id')
     setDataLocale(isLocale)
