@@ -1,32 +1,9 @@
 import React from 'react'
 import { PiLockKeyDuotone } from 'react-icons/pi'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import AlertMessage from '../../../../components/alert/AlertMessage'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { useMutation } from '@tanstack/react-query'
-import { POST_REGISTER_USER } from '../../../../services/register.services'
-import { openAlert } from '../../../../utils/handleModal'
+import { SubmitHandler, UseFormRegister, FieldErrors, UseFormHandleSubmit } from 'react-hook-form'
 import useLocale from '../../../../hooks/useLocale'
-
-const FormSchema = z
-  .object({
-    name: z
-      .string()
-      .min(1, { message: 'Name is required' })
-      .min(3, { message: 'Name must be at least 3 characters' }),
-    email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Invalid email' }),
-    password: z
-      .string()
-      .min(1, { message: 'Password is required' })
-      .min(6, { message: 'Password must be at least 6 characters' }),
-    confirmPassword: z.string().min(1, { message: 'Confirm Password is required' }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword'],
-  })
 
 type Inputs = {
   name: string
@@ -35,49 +12,25 @@ type Inputs = {
   confirmPassword: string
 }
 
-const FormRegister = () => {
-  const navigate = useNavigate()
-  const [errorMessage, setErrorMessage] = React.useState<string>('')
-  const [loading, setLoading] = React.useState<boolean>(false)
+type FormRegisterProps = {
+  loading: boolean
+  register: UseFormRegister<Inputs>
+  errors: FieldErrors<Inputs>
+  onSubmit: SubmitHandler<Inputs>
+  handleSubmit: UseFormHandleSubmit<Inputs, undefined>
+  errorResponse: string
+}
+
+const FormRegister: React.FC<FormRegisterProps> = ({
+  loading,
+  register,
+  errors,
+  onSubmit,
+  handleSubmit,
+  errorResponse,
+}) => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const { isLocale } = useLocale()
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    },
-  })
-
-  const { mutateAsync: registerUser } = useMutation({
-    mutationFn: POST_REGISTER_USER,
-    onSuccess: () => {
-      setLoading(false)
-      openAlert('alert-confirm')
-      navigate('/auth/login')
-    },
-    onError: (error: string) => {
-      setLoading(false)
-      setErrorMessage(error)
-    },
-  })
-
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    setLoading(true)
-    const user = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    }
-    await registerUser(user)
-  }
 
   const handleCheckboxChange = () => {
     setShowPassword(!showPassword)
@@ -116,8 +69,8 @@ const FormRegister = () => {
             {errors.email ? (
               <AlertMessage message={errors.email?.message} />
             ) : (
-              errorMessage?.toLowerCase().includes('email') && (
-                <AlertMessage message={errorMessage} />
+              errorResponse?.toLowerCase().includes('email') && (
+                <AlertMessage message={errorResponse} />
               )
             )}
           </label>
