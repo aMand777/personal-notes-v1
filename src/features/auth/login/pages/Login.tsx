@@ -1,5 +1,5 @@
 import React from 'react'
-import NavAuth from '../../../../components/nav/NavAuth'
+import NavAuth from '../../../../components/navigation/NavAuth'
 import FormLogin from '../components/FormLogin'
 import useAuth from '../../../../hooks/useAuth'
 import { Navigate } from 'react-router-dom'
