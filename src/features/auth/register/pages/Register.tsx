@@ -1,3 +1,4 @@
+import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import NavAuth from '../../../../components/nav/NavAuth'
 import FormRegister from '../components/FormRegister'
@@ -7,7 +8,6 @@ import { useMutation } from '@tanstack/react-query'
 import { POST_REGISTER_USER } from '../../../../services/register.services'
 import { openAlert } from '../../../../utils/handleModal'
 import { useNavigate } from 'react-router-dom'
-import React from 'react'
 
 const FormSchema = z
   .object({
