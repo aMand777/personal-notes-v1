@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import Navbar from '../components/nav/Navbar'
-import NavbarMobile from '../components/nav/NavbarMobile'
-import NavMenu from '../components/nav/NavMenu'
+import Navbar from '../components/navigation/Navbar'
+import NavbarMobile from '../components/navigation/NavbarMobile'
+import NavMenu from '../components/navigation/NavMenu'
 import { useLocation } from 'react-router-dom'
 import AlertConfirm from '../components/alert/AlertConfirm'
 

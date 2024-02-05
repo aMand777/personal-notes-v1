@@ -1,6 +1,6 @@
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import NavAuth from '../../../../components/nav/NavAuth'
+import NavAuth from '../../../../components/navigation/NavAuth'
 import FormRegister from '../components/FormRegister'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -40,41 +40,41 @@ const Register = () => {
   const [errorResponse, setErrorResponse] = React.useState<string>('')
 
   const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm<Inputs>({
-      resolver: zodResolver(FormSchema),
-      defaultValues: {
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      },
-    })
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+  })
 
-    const { mutateAsync: registerUser } = useMutation({
-      mutationFn: POST_REGISTER_USER,
-      onSuccess: () => {
-        setLoading(false)
-        openAlert('alert-confirm')
-        navigate('/auth/login')
-      },
-      onError: (error: string) => {
-        setLoading(false)
-        setErrorResponse(error)
-      },
-    })
+  const { mutateAsync: registerUser } = useMutation({
+    mutationFn: POST_REGISTER_USER,
+    onSuccess: () => {
+      setLoading(false)
+      openAlert('alert-confirm')
+      navigate('/auth/login')
+    },
+    onError: (error: string) => {
+      setLoading(false)
+      setErrorResponse(error)
+    },
+  })
 
-    const onSubmit: SubmitHandler<Inputs> = async (data) => {
-      setLoading(true)
-      const user = {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      }
-      await registerUser(user)
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setLoading(true)
+    const user = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
     }
+    await registerUser(user)
+  }
   return (
     <>
       <NavAuth />
@@ -84,7 +84,8 @@ const Register = () => {
         errors={errors}
         onSubmit={onSubmit}
         handleSubmit={handleSubmit}
-        errorResponse={errorResponse}/>
+        errorResponse={errorResponse}
+      />
     </>
   )
 }
