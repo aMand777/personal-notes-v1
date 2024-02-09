@@ -27,7 +27,7 @@ const Login = () => {
   const queryClient = useQueryClient()
   const { isAuthenticated } = useAuth()
   const [loading, setLoading] = React.useState<boolean>(false)
-  const [errorResponse, setErrorResponse] = React.useState<string>('')
+  const [errorResponse, setErrorResponse] = React.useState<string | undefined>('')
 
   const {
     register,
