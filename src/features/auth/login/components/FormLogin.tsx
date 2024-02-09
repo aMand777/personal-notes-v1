@@ -16,7 +16,7 @@ type FormLoginProps = {
   errors: FieldErrors<Inputs>
   onSubmit: SubmitHandler<Inputs>
   handleSubmit: UseFormHandleSubmit<Inputs>
-  errorResponse: string
+  errorResponse: string | undefined
 }
 
 const FormLogin: React.FC<FormLoginProps> = ({
